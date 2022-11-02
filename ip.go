@@ -2,7 +2,9 @@ package ip
 
 import (
 	// import built-in packages
+	"io/ioutil"
 	"net"
+	"net/http"
 )
 
 // 内部IPv4地址
@@ -51,4 +53,18 @@ func InternalV6() string {
 	}
 	// return value
 	return ""
+}
+
+// 公共IPv4地址
+func PublicV4() string {
+	resp, err := http.Get("https://ipinfo.io/ip")
+	// control flow
+	if err != nil {
+		// return value
+		return ""
+	}
+	defer resp.Body.Close()
+	body, _ := ioutil.ReadAll(resp.Body)
+	// return value
+	return string(body)
 }
